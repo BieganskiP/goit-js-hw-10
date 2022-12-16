@@ -42,11 +42,12 @@ inputCountry.addEventListener(
   'input',
   _.debounce(() => {
     countryInfo.innerHTML = '';
+    countryList.innerHTML = '';
     if (inputCountry.value == '') {
       return;
     } else {
       fetchCountries(inputCountry.value.trim());
-      countryList.innerHTML = '';
+
     }
   }, DEBOUNCE_DELAY)
 );
@@ -68,8 +69,6 @@ const countryInfoDetails = country => {
   <h2>${country.name.common}</h2>
   <p><span class="bold">Capital:</span> ${country.capital}</p>
   <p><span class="bold">Population:</span> ${country.population}</p>
-  <p><span class="bold">Languages:</span> ${Object.values(
-    country.languages
-  )}</>
+  <p><span class="bold">Languages:</span> ${Object.values(country.languages)}</>
   `;
 };
