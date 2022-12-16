@@ -60,6 +60,9 @@ label {
 .country-info {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 40ch;
+  text-align: center;
 }
 .country-info img {
   width: 200px;
