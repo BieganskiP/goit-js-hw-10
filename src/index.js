@@ -24,61 +24,52 @@ const fetchCountries = async name => {
           'Too many matches found. Please enter a more specific name.'
         );
       } else if (data.length <= 10 && data.length > 1) {
-        console.log(data);
         data.forEach(country => {
-          let newCountry = document.createElement('li');
-          let flag = document.createElement('img');
-          let name = document.createElement('p');
-
-          countryList.appendChild(newCountry);
-          newCountry.appendChild(flag);
-          newCountry.appendChild(name);
-          newCountry.classList.add('country-list__element');
-          flag.setAttribute('src', country.flags.svg);
-          flag.setAttribute('alt', country.name.official);
-          name.innerHTML = `${country.name.common}`;
+          // Lists up to 10 countries that match entered value
+          countryListEl(country);
         });
       } else {
-        console.log(data);
         data.forEach(country => {
-          let countryFlag = document.createElement('img');
-          let countryName = document.createElement('h2');
-          let capital = document.createElement('p');
-          let population = document.createElement('p');
-          let languages = document.createElement('p');
-
-          countryInfo.appendChild(countryFlag);
-          countryFlag.setAttribute('src', country.flags.svg);
-          countryFlag.setAttribute('alt', country.name.official);
-
-          countryInfo.appendChild(countryName);
-          countryName.innerHTML = `${country.name.common}`;
-
-          countryInfo.appendChild(capital);
-          capital.innerHTML = `<span class="bold">Capital:</span> ${country.capital}`;
-
-          countryInfo.appendChild(population);
-          population.innerHTML = `<span class="bold">Population:</span> ${country.population}`;
-          countryInfo.appendChild(languages);
-          languages.innerHTML = `<span class="bold">Languages:</span> ${Object.values(
-            country.languages
-          )}`;
+          // Creates html element for country with more detailed information
+          countryInfoDetails(country);
         });
       }
     })
-    .catch(error => Notify.failure('Oops, there is no country with that name'));
+    .catch(() => Notify.failure('Oops, there is no country with that name'));
 };
 
 inputCountry.addEventListener(
   'input',
   _.debounce(() => {
+    countryInfo.innerHTML = '';
     if (inputCountry.value == '') {
-      countryInfo.innerHTML = '';
       return;
     } else {
       fetchCountries(inputCountry.value.trim());
       countryList.innerHTML = '';
-      countryInfo.innerHTML = '';
     }
   }, DEBOUNCE_DELAY)
 );
+
+const countryListEl = country => {
+  countryList.insertAdjacentHTML(
+    'beforeend',
+    `
+  <li class="country-list__element">
+    <img src="${country.flags.svg}" alt="${country.flags.svg}"/>
+    <p>${country.name.common}</p>
+   </li>`
+  );
+};
+
+const countryInfoDetails = country => {
+  countryInfo.innerHTML = `
+  <img src="${country.flags.svg}" alt="${country.flags.svg}"/>
+  <h2>${country.name.common}</h2>
+  <p><span class="bold">Capital:</span> ${country.capital}</p>
+  <p><span class="bold">Population:</span> ${country.population}</p>
+  <p><span class="bold">Languages:</span> ${Object.values(
+    country.languages
+  )}</>
+  `;
+};
